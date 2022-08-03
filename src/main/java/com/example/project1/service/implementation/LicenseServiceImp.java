@@ -1,6 +1,5 @@
 package com.example.project1.service.implementation;
 
-import com.example.project1.entity.Content;
 import com.example.project1.entity.License;
 import com.example.project1.repository.ContentRepository;
 import com.example.project1.repository.LicenseRepository;

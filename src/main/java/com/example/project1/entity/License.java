@@ -3,18 +3,18 @@ package com.example.project1.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
-import java.util.Date;
 import java.util.Set;
 
 @Entity
 public class License {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
-    private Date startTime;
-    private Date endTime;
+    private Long startTime;
+    private Long endTime;
+
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "licenses")
@@ -24,7 +24,7 @@ public class License {
     public License() {
     }
 
-    public License(Long id, String name, Date startTime, Date endTime, Set<Content> contents) {
+    public License(Long id, String name, Long startTime, Long endTime, Set<Content> contents) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
@@ -32,7 +32,7 @@ public class License {
         this.contents = contents;
     }
 
-    public License(String name, Date startTime, Date endTime, Set<Content> contents) {
+    public License(String name, Long startTime, Long endTime, Set<Content> contents) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -55,20 +55,20 @@ public class License {
         this.name = name;
     }
 
-    public Date getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
-    public Date setStartTime(Date startTime) {
+    public Long setStartTime(Long startTime) {
         return this.startTime = startTime;
 
     }
 
-    public Date getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public Date setEndTime(Date endTime) {
+    public Long setEndTime(Long endTime) {
         return this.endTime = endTime;
     }
 

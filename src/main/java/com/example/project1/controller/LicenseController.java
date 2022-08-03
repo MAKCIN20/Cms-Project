@@ -26,10 +26,10 @@ public class LicenseController {
 
 
     public ResponseEntity<License> saveLicense(@RequestBody License license) {
-        License license1 = licenseService.insert(license);
+        License selectedLicense = licenseService.insert(license);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("license", "/api/v1/license" + license1.getId().toString());
-        return new ResponseEntity<>(license1, httpHeaders, HttpStatus.CREATED);
+        httpHeaders.add("license", "/api/v1/license" + selectedLicense.getId().toString());
+        return new ResponseEntity<>(selectedLicense, httpHeaders, HttpStatus.CREATED);
     }
 
     @PostMapping

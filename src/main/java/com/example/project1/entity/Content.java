@@ -1,17 +1,13 @@
 package com.example.project1.entity;
 
 import javax.persistence.*;
-import java.net.URL;
 import java.util.Set;
 
 @Entity
-public class Content {
-    @Id
-  /*  @SequenceGenerator(name="Css_sequence",
-    sequenceName = "Css_sequence",
-    allocationSize = 1)*/
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+public class Content{
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
     private String name;
     private String status;
@@ -83,6 +79,7 @@ public class Content {
     public void setLicenses(Set<License> licenses) {
         this.licenses = licenses;
     }
+
     @Override
     public String toString() {
         return "Content{" + "id=" + id + ", name='" + name + '\'' + ", status=" + status + ", licenses=" + licenses + ", posterUrl=" + posterUrl + ", videoUrl=" + videoUrl + '}';

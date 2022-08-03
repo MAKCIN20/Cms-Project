@@ -9,10 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,8 +48,8 @@ public class ContentServiceImp implements ContentService {
         if (content != null && license != null) {
             if (content.getLicenses().size() >= 1) {
 
-                for (License license1 : content.getLicenses()) {
-                    if ((checkOverlapping(license.getStartTime(), license.getEndTime(), license1.getStartTime(), license1.getEndTime()))) {
+                for (License selectedLicense : content.getLicenses()) {
+                    if ((checkOverlapping(license.getStartTime(), license.getEndTime(), selectedLicense.getStartTime(), selectedLicense.getEndTime()))) {
                         isValid = false;
                     }
                     if (isValid == false) {
@@ -105,10 +103,13 @@ public class ContentServiceImp implements ContentService {
     }
 
     @Override
-    public ResponseEntity<List<Content>> getAll() {
-        List<Content> contents = new ArrayList<Content>();
-        contentRepository.findAll().forEach(contents::add);
-        return new ResponseEntity<>(contents, HttpStatus.OK);
+    public List<Content> getAll(String contentName) {
+        if (contentName != null && !contentName.trim().equals("")) {
+            return contentRepository.findByName(contentName);
+        } else {
+            return contentRepository.findAll();
+        }
+
     }
 
     @Override
@@ -119,34 +120,9 @@ public class ContentServiceImp implements ContentService {
     }
 
 
-    public Boolean checkOverlapping(Date start1, Date end1, Date start2, Date end2) {
-        return (start1.before(start2) && start2.before(end1)) || (start2.before(start1)) && start1.before(end2) ||
-                (start2.before(end1) && end2.after(end1) || (start1.before(end2) && start1.after(end2)));
+    public Boolean checkOverlapping(Long firstStartTime, Long firstEndTime, Long secondStartTime, Long secondEndTime) {
+        return ((firstStartTime<secondStartTime) && (secondStartTime<firstEndTime)) || ((secondStartTime<firstStartTime) && (firstStartTime<secondEndTime)) ||
+                ((secondStartTime<firstEndTime) && (secondEndTime<firstEndTime)) || ((firstStartTime<secondEndTime) && (firstStartTime>secondEndTime));
     }
 
-    public void publishSchedule(Long contentId, Long licenceId) {
-        Content content = contentRepository.findOneById(contentId);
-        License license = licenseRepository.findOneById(licenceId);
-        Date today = new Date();
-        today.setHours(0);
-        if (content != null && license != null) {
-            if (content.getLicenses().size() > 1) {
-                boolean a = true; //this value help to control under codes
-                for (License license1 : content.getLicenses()) {
-                    if (license1.getStartTime().before(today) && license1.getEndTime().after(today)) {
-                        content.setStatus("Published");
-                    } else if ((license1.getStartTime().before(today) && license1.getEndTime().before(today))) {
-                        content.setStatus("Inprogress");
-                    }
-
-                }
-                contentRepository.save(content);
-            }
-        }
-    }
-
-    @Override
-    public void uploadPosterToContent(Long contentId, MultipartFile poster) {
-
-    }
 }
