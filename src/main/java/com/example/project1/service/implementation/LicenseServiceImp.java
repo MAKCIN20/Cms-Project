@@ -16,8 +16,13 @@ public class LicenseServiceImp implements LicenseService {
     private ContentRepository contentRepository;
 
     @Override
-    public List<License> getAll() {
-        return licenseRepository.findAll();
+    public List<License> getAll(String licenseName) {
+        if (licenseName != null && !licenseName.trim().equals("")) {
+            return licenseRepository.findByName(licenseName);
+        } else {
+            return licenseRepository.findAll();
+        }
+
     }
 
 

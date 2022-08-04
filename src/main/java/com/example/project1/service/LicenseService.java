@@ -16,6 +16,6 @@ public interface LicenseService {
     void deleteLicense(Long licenseId);
 
 
-    List<License> getAll();
+    List<License> getAll(String licenseName);
 
 }

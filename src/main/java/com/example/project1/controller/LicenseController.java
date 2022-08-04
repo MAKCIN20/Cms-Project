@@ -20,8 +20,8 @@ public class LicenseController {
     private LicenseService licenseService;
 
     @GetMapping
-    public ResponseEntity<List<License>> getAll() {
-        return ResponseEntity.ok(licenseService.getAll());
+    public ResponseEntity<List<License>> getAll(@RequestParam(value = "licenseName", required = false) String licenseName) {
+        return ResponseEntity.ok(licenseService.getAll(licenseName));
     }
 
 
@@ -53,9 +53,9 @@ public class LicenseController {
     }
 
     @DeleteMapping({"/{licenseId}"})
-    public ResponseEntity<License> deleteLicense(@PathVariable("licenseId") Long licenseId) {
+    public ResponseEntity<String> deleteLicense(@PathVariable("licenseId") Long licenseId) {
         licenseService.deleteLicense(licenseId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return  ResponseEntity.ok("Deleted");
     }
 }
 

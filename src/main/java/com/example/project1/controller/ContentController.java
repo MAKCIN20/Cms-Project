@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -41,9 +41,9 @@ public class ContentController {
     @PostMapping
     public ResponseEntity insert(@RequestBody Content content) {
         contentService.insert(content);
-        LocalDate today = LocalDate.now();
-        ZoneId zoneId = ZoneId.of("Europe/Paris"); // or: ZoneId.of("Europe/Oslo");
-        long epoch = today.atStartOfDay(zoneId).toEpochSecond();
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy MM dd"));
+        today = today.replaceAll("\\s", "");
+        long epoch = Long.parseLong(today);
         if (content.getLicenses() != null) {
             for (License selectedLicense : content.getLicenses())
                 if ((selectedLicense.getStartTime()<epoch && selectedLicense.getEndTime()>epoch) && (content.getVideoUrl() != null && content.getposterUrl() != null)) {
